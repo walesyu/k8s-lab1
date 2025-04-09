@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+    spec:
+      containers:
+        - name: java-app-container
+          image: <您的 Docker Registry>/java-app:latest  # 將 <您的 Docker Registry> 替換為您的 Docker 鏡像倉庫
+          ports:
+            - containerPort: 8080
+          env:
+            - name: AZURE_APP_CONFIGURATION_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: app-config-secret
+                  key: connection-string
